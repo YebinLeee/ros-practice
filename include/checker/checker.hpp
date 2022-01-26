@@ -26,19 +26,29 @@
 #include "msg_srv_action_interface_example/action/arithmetic_checker.hpp"
 
 
+
+/*
+  Checker 클래스
+  rclcpp::Node 클래스를 상속받는 자식 클래스
+*/
+
 class Checker : public rclcpp::Node
 {
 public:
   using ArithmeticChecker = msg_srv_action_interface_example::action::ArithmeticChecker;
   using GoalHandleArithmeticChecker = rclcpp_action::ClientGoalHandle<ArithmeticChecker>;
 
+  // 생성자
   explicit Checker(
-    float goal_sum,
+    float goal_sum, // (실행 인자 프로그래밍)
     const rclcpp::NodeOptions & node_options = rclcpp::NodeOptions());
   virtual ~Checker();
 
 private:
-  void send_goal_total_sum(float goal_sum);
+  void send_goal_total_sum(float goal_sum); // 액션 요청
+
+
+  // 액션 동작시 호출되는 콜백 함수들
 
   void get_arithmetic_action_goal(
     std::shared_future<rclcpp_action::ClientGoalHandle<ArithmeticChecker>::SharedPtr> future);
@@ -50,6 +60,7 @@ private:
   void get_arithmetic_action_result(
     const GoalHandleArithmeticChecker::WrappedResult & result);
 
+  // rclcpp_action::Client 타입의 스마트 포인터 멤버 변수
   rclcpp_action::Client<ArithmeticChecker>::SharedPtr arithmetic_action_client_;
 };
 #endif  // CHECKER__CHECKER_HPP_
