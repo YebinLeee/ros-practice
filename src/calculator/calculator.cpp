@@ -21,9 +21,10 @@
 
 #include "calculator/calculator.hpp"
 
-/*
-  Calculator 클래스는 rclcpp::node를 상속하고 있고, 생성자에서 'calculator'라는 노드 이름으로 초기화됨
 
+/*
+  Calculator 클래스
+  rclcpp::node를 상속하고 있고, 생성자에서 'calculator'라는 노드 이름으로 초기화됨
 */
 
 Calculator::Calculator(const rclcpp::NodeOptions & node_options)
@@ -90,12 +91,15 @@ Calculator::Calculator(const rclcpp::NodeOptions & node_options)
       RCLCPP_INFO(this->get_logger(), "%s", argument_formula_.c_str());
     };
 
-  // 멤버 변수
+  // 멤버 변수 arithmetic_argument_server
   // rclcpp::Service타입의 스마트 포인터 변수 - 서비스명(arithmetic_operator)과 콜백함수(get_arithmetic_operator)를 인자로 받는 create_service함수로 실체화됨
   arithmetic_argument_server_ =
     create_service<ArithmeticOperator>("arithmetic_operator", get_arithmetic_operator);
 
+
   using namespace std::placeholders;
+  // 멤버 변수 arithmetic_action_server
+  // node 정보들과 액션명, 콜백함수들을 인자로 가지는 create_server 함수를 통해 실체화됨
   arithmetic_action_server_ = rclcpp_action::create_server<ArithmeticChecker>(
     this->get_node_base_interface(),
     this->get_node_clock_interface(),
@@ -143,7 +147,9 @@ float Calculator::calculate_given_formula(
   return argument_result;
 }
 
+// 액션 클라이언트에서 액션 목표(goal)을 요청했을 때 콜백되는 함수
 rclcpp_action::GoalResponse Calculator::handle_goal(
+  // 액션 클라이언트 메시지 uuid, 목표값 GoalUUID 확인
   const rclcpp_action::GoalUUID & uuid,
   std::shared_ptr<const ArithmeticChecker::Goal> goal)
 {
@@ -152,6 +158,8 @@ rclcpp_action::GoalResponse Calculator::handle_goal(
   return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
 }
 
+// 응답 취소
+// 액션 목표 취소 요청했을 때 콜백되는 함수
 rclcpp_action::CancelResponse Calculator::handle_cancel(
   const std::shared_ptr<GoalHandleArithmeticChecker> goal_handle)
 {
@@ -160,6 +168,8 @@ rclcpp_action::CancelResponse Calculator::handle_cancel(
   return rclcpp_action::CancelResponse::ACCEPT;
 }
 
+// 액션 목표값에 대한 처리 수행
+// 액션 클라이언트에서 요청한 액션 목표를 가지고 실제 테스크가 진행되는 함수
 void Calculator::execute_checker(const std::shared_ptr<GoalHandleArithmeticChecker> goal_handle)
 {
   RCLCPP_INFO(this->get_logger(), "Execute arithmetic_checker action!");
@@ -167,10 +177,11 @@ void Calculator::execute_checker(const std::shared_ptr<GoalHandleArithmeticCheck
 
   auto feedback_msg = std::make_shared<ArithmeticChecker::Feedback>();
   float total_sum = 0.0;
-  float goal_sum = goal_handle->get_goal()->goal_sum;
+  float goal_sum = goal_handle->get_goal()->goal_sum; // 액션 목표값을 가져오는 get_goal 함수
 
   while ((total_sum < goal_sum) && rclcpp::ok()) {
     total_sum += argument_result_;
+    // argument_formula 멤버 변수를 액션 클라이언트에 publish
     feedback_msg->formula.push_back(argument_formula_);
     if (argument_formula_.empty()) {
       RCLCPP_WARN(this->get_logger(), "Please check your formula");
