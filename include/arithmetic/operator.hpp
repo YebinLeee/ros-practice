@@ -25,19 +25,24 @@
 #include "msg_srv_action_interface_example/srv/arithmetic_operator.hpp"
 
 
-// Operator 클래스
+/*
+  Operator 클래스
+  rclcpp::Node 클래스 상속 받는 자식 클래스
+*/
 class Operator : public rclcpp::Node
 {
 public:
   using ArithmeticOperator = msg_srv_action_interface_example::srv::ArithmeticOperator;
 
-  // 생성자에서 rclcpp::NodeOptions를 인자로 받음
+  // 생성자에서 rclcpp::NodeOptions를 매개변수로 가짐
   explicit Operator(const rclcpp::NodeOptions & node_options = rclcpp::NodeOptions());
   virtual ~Operator();
 
-  void send_request(); // 서비스 요청
+  // 서비스 요청 함수
+  void send_request();
 
 private:
+  // 스마트 포인터 타입의 멤버 변수
   rclcpp::Client<ArithmeticOperator>::SharedPtr arithmetic_service_client_;
 };
 #endif  // ARITHMETIC__OPERATOR_HPP_
