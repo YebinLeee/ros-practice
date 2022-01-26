@@ -62,9 +62,8 @@ void Operator::send_request()
   using ServiceResponseFuture = rclcpp::Client<ArithmeticOperator>::SharedFuture;
   
   // 요청에 의한 응답이 왔을 때 불려질 response_received_callback 콜백 함수
-  // future 인자 -> response 값 저장 후 로그로 확인
   auto response_received_callback = [this](ServiceResponseFuture future) {
-      auto response = future.get();
+      auto response = future.get(); // 비동기식 future의 get 함수를 이용해 response 값에 접근
       RCLCPP_INFO(this->get_logger(), "Result %.2f", response->arithmetic_result);
       return;
     };
