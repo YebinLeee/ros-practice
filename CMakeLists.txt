@@ -81,6 +81,9 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
+
+---------------------- 파라미터, 런치 파일 경로 설정 후 --------------------
+
 install(DIRECTORY launch param
   DESTINATION share/${PROJECT_NAME}
 )
