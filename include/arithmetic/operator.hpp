@@ -25,15 +25,17 @@
 #include "msg_srv_action_interface_example/srv/arithmetic_operator.hpp"
 
 
+// Operator 클래스
 class Operator : public rclcpp::Node
 {
 public:
   using ArithmeticOperator = msg_srv_action_interface_example::srv::ArithmeticOperator;
 
+  // 생성자에서 rclcpp::NodeOptions를 인자로 받음
   explicit Operator(const rclcpp::NodeOptions & node_options = rclcpp::NodeOptions());
   virtual ~Operator();
 
-  void send_request();
+  void send_request(); // 서비스 요청
 
 private:
   rclcpp::Client<ArithmeticOperator>::SharedPtr arithmetic_service_client_;
