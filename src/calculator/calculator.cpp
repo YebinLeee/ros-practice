@@ -69,8 +69,8 @@ Calculator::Calculator(const rclcpp::NodeOptions & node_options)
     }
   );
 
-  // 람다식 함수get_arithemtic_operator
-  //Request와 Response
+  // 람다식 함수 get_arithemtic_operator
+  // Request와 Response
   auto get_arithmetic_operator =
     [this](
     const std::shared_ptr<ArithmeticOperator::Request> request,
@@ -92,7 +92,8 @@ Calculator::Calculator(const rclcpp::NodeOptions & node_options)
     };
 
   // 멤버 변수 arithmetic_argument_server
-  // rclcpp::Service타입의 스마트 포인터 변수 - 서비스명(arithmetic_operator)과 콜백함수(get_arithmetic_operator)를 인자로 받는 create_service함수로 실체화됨
+  // rclcpp::Service타입의 스마트 포인터 변수
+  // 서비스명(arithmetic_operator)과 콜백함수(get_arithmetic_operator)를 인자로 받는 create_service 함수로 실체화됨
   arithmetic_argument_server_ =
     create_service<ArithmeticOperator>("arithmetic_operator", get_arithmetic_operator);
 
