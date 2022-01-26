@@ -34,9 +34,7 @@ ament_target_dependencies(argument
 
 
 
-
-
---------------------------- calculator (서비스 서버 노드) 실행 --------------------------
+------------------------- calculator (서비스 서버, 액션 서버 노드) 실행 ------------------------
 
 add_executable(calculator src/calculator/main.cpp src/calculator/calculator.cpp)
 ament_target_dependencies(calculator
@@ -44,6 +42,10 @@ ament_target_dependencies(calculator
   rclcpp
   rclcpp_action
 )
+
+
+
+------------------------- checker (액션 클라이언트 노드) 실행 ------------------------
 
 add_executable(checker src/checker/main.cpp src/checker/checker.cpp)
 ament_target_dependencies(checker
