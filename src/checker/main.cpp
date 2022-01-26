@@ -18,7 +18,7 @@
 #include <utility>
 
 #include "rclcpp/rclcpp.hpp"
-#include "rcutils/cmdline_parser.h"
+#include "rcutils/cmdline_parser.h" // main 문의 인자를 쉽게 확인 가능
 
 #include "checker/checker.hpp"
 
@@ -33,15 +33,21 @@ void print_help()
 
 int main(int argc, char * argv[])
 {
+
+  // '-h' 인자가 있는지 확인
   if (rcutils_cli_option_exist(argv, argv + argc, "-h")) {
     print_help();
     return 0;
   }
 
+  // main 함수로 넘겨받은 argc, argv 인자를 다시 넘겨주어 '--ros-args' 인자를 rclcpp가 확인할 수 있도록 해줌
   rclcpp::init(argc, argv);
 
   float goal_total_sum = 50.0;
-  char * cli_option = rcutils_cli_get_option(argv, argv + argc, "-g");
+  
+  // 실행 인자를 확인하고 그 값을 문자열 포인터로 반환
+  // 사용자는 문자열 포인터를 원하는 변수 타입으로 변경하여 노드의 생성인자로 넘겨줄 수 있게 됨
+  char * cli_option = rcutils_cli_get_option(argv, argv + argc, "-g"); 
   if (nullptr != cli_option) {
     goal_total_sum = std::stof(cli_option);
   }
