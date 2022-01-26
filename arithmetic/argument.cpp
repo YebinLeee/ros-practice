@@ -25,19 +25,25 @@
 
 using namespace std::chrono_literals;
 
+// Argument 클래스 생성자
 Argument::Argument(const rclcpp::NodeOptions & node_options)
 : Node("argument", node_options),
   min_random_num_(0.0),
   max_random_num_(0.0)
 {
+  // Argument 노드에서 사용할 파라미터를 선언하기 위해 파라미터 이름, 초깃값 인자로 input 
   this->declare_parameter("qos_depth", 10);
-  int8_t qos_depth = this->get_parameter("qos_depth").get_value<int8_t>();
+  int8_t qos_depth = this->get_parameter("qos_depth").get_value<int8_t>(); // get을 통해 선언한 파라미터 값 회수 가능
+    
   this->declare_parameter("min_random_num", 0.0);
   min_random_num_ = this->get_parameter("min_random_num").get_value<float>();
+    
   this->declare_parameter("max_random_num", 9.0);
   max_random_num_ = this->get_parameter("max_random_num").get_value<float>();
+   
   this->update_parameter();
 
+    
   const auto QOS_RKL10V =
     rclcpp::QoS(rclcpp::KeepLast(qos_depth)).reliable().durability_volatile();
 
@@ -68,6 +74,8 @@ void Argument::publish_random_arithmetic_arguments()
   RCLCPP_INFO(this->get_logger(), "Published argument_b %.2f", msg.argument_b);
 }
 
+
+// update: AsyncParametersClient를 this 포인터로 초기화
 void Argument::update_parameter()
 {
   parameters_client_ = std::make_shared<rclcpp::AsyncParametersClient>(this);
@@ -78,7 +86,8 @@ void Argument::update_parameter()
     }
     RCLCPP_INFO(this->get_logger(), "service not available, waiting again...");
   }
-
+  
+  // 서버에 이벤트(등록, 변경, 삭제)까 있을 때 콜백되는 함수 등록
   auto param_event_callback =
     [this](const rcl_interfaces::msg::ParameterEvent::SharedPtr event) -> void
     {
