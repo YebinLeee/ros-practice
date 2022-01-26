@@ -42,6 +42,8 @@ private:
 
   rclcpp::Publisher<ArithmeticArgument>::SharedPtr arithmetic_argument_publisher_;
   rclcpp::TimerBase::SharedPtr timer_;
+  
+  // ParameterEvent타입으로 선언된 토픽 서브스크라이버, AsyncParametersClient 클래스의 스마트 포인터
   rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_event_sub_;
   rclcpp::AsyncParametersClient::SharedPtr parameters_client_;
 };

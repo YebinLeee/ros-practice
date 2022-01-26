@@ -25,17 +25,22 @@
 
 using namespace std::chrono_literals;
 
+// Argument 클래스 생성자
 Argument::Argument(const rclcpp::NodeOptions & node_options)
 : Node("argument", node_options),
   min_random_num_(0.0),
   max_random_num_(0.0)
 {
-  this->declare_parameter("qos_depth", 10);
-  int8_t qos_depth = this->get_parameter("qos_depth").get_value<int8_t>();
+  // 파라미터 선언
+  this->declare_parameter("qos_depth", 10); // 파라미터 이름, 초깃값
+  int8_t qos_depth = this->get_parameter("qos_depth").get_value<int8_t>();  // 선언한 파라미터의 값 회수
+
   this->declare_parameter("min_random_num", 0.0);
   min_random_num_ = this->get_parameter("min_random_num").get_value<float>();
+
   this->declare_parameter("max_random_num", 9.0);
   max_random_num_ = this->get_parameter("max_random_num").get_value<float>();
+
   this->update_parameter();
 
   const auto QOS_RKL10V =
@@ -68,6 +73,7 @@ void Argument::publish_random_arithmetic_arguments()
   RCLCPP_INFO(this->get_logger(), "Published argument_b %.2f", msg.argument_b);
 }
 
+// 런타임에서 파라미터 서버에 이벤트(등록,변경,삭제)가 있을때 콜백되는 함수 등록
 void Argument::update_parameter()
 {
   parameters_client_ = std::make_shared<rclcpp::AsyncParametersClient>(this);
