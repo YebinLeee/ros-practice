@@ -32,6 +32,7 @@ void print_help()
 }
 
 
+// 메인 함수 실행
 int main(int argc, char * argv[])
 {
   if (rcutils_cli_option_exist(argv, argv + argc, "-h")) {

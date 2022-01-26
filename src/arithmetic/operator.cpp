@@ -60,13 +60,16 @@ void Operator::send_request()
   request->arithmetic_operator = distribution(gen);
 
   using ServiceResponseFuture = rclcpp::Client<ArithmeticOperator>::SharedFuture;
+  
   // 요청에 의한 응답이 왔을 때 불려질 response_received_callback 콜백 함수
+  // future 인자 -> response 값 저장 후 로그로 확인
   auto response_received_callback = [this](ServiceResponseFuture future) {
       auto response = future.get();
       RCLCPP_INFO(this->get_logger(), "Result %.2f", response->arithmetic_result);
       return;
     };
 
+  // 비동기식으로 서비스 요청 보냄
   auto future_result =
     arithmetic_service_client_->async_send_request(request, response_received_callback);
 }
@@ -109,6 +112,7 @@ int kbhit(void)
   return 0;
 }
 
+// 입력받게 되는 키
 bool pull_trigger()
 {
   const uint8_t KEY_ENTER = 10;
@@ -142,14 +146,16 @@ int main(int argc, char * argv[])
 
   rclcpp::init(argc, argv);
 
+  // Operator 클래스 인스턴스화
   auto operator_node = std::make_shared<Operator>();
 
+  // 반복적으로 send_request 함수 호출
   while (rclcpp::ok()) {
     rclcpp::spin_some(operator_node);
     operator_node->send_request();
 
     printf("Press Enter for next service call.\n");
-    if (pull_trigger() == false) {
+    if (pull_trigger() == false) { // 서비스 요청 종료 후 다음 키보드 입력 받아 종료
       rclcpp::shutdown();
       return 0;
     }
