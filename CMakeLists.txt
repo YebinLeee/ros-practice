@@ -31,6 +31,13 @@ ament_target_dependencies(argument
   rclcpp
 )
 
+
+
+
+
+
+--------------------------- calculator (서비스 서버 노드) 실행 --------------------------
+
 add_executable(calculator src/calculator/main.cpp src/calculator/calculator.cpp)
 ament_target_dependencies(calculator
   msg_srv_action_interface_example
@@ -44,6 +51,11 @@ ament_target_dependencies(checker
   rclcpp
   rclcpp_action
 )
+
+
+
+
+--------------------------- operator (서비스 클라이언트 노드) 실행 --------------------------
 
 add_executable(operator src/arithmetic/operator.cpp)
 ament_target_dependencies(operator
