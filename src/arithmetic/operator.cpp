@@ -29,9 +29,11 @@
 
 using namespace std::chrono_literals;
 
+// Operator 클래스 생성자
 Operator::Operator(const rclcpp::NodeOptions & node_options)
-: Node("operator", node_options)
+: Node("operator", node_options) // 부모 클래스 rclcpp::Node 노드명과 node_options 인자로 초기화
 {
+  // create_client 함수로 서비스명을 인자로 받아 rclcpp::Client 실체화
   arithmetic_service_client_ = this->create_client<ArithmeticOperator>("arithmetic_operator");
   while (!arithmetic_service_client_->wait_for_service(1s)) {
     if (!rclcpp::ok()) {
@@ -46,15 +48,19 @@ Operator::~Operator()
 {
 }
 
+// 실제로 요청을 수행하는 send_request 함수
 void Operator::send_request()
 {
   auto request = std::make_shared<ArithmeticOperator::Request>();
   std::random_device rd;
   std::mt19937 gen(rd());
+
+  // 1~4 사이의 랜덤한 숫자 생성하여 request 변수에 저장
   std::uniform_int_distribution<int> distribution(1, 4);
   request->arithmetic_operator = distribution(gen);
 
   using ServiceResponseFuture = rclcpp::Client<ArithmeticOperator>::SharedFuture;
+  // 요청에 의한 응답이 왔을 때 불려질 response_received_callback 콜백 함수
   auto response_received_callback = [this](ServiceResponseFuture future) {
       auto response = future.get();
       RCLCPP_INFO(this->get_logger(), "Result %.2f", response->arithmetic_result);
