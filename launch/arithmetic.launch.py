@@ -34,8 +34,8 @@ from launch_ros.actions import Node
             Node(ccc),
         ])
 
-
 '''
+
 def generate_launch_description():
     # LaunchConfiguration 클래스 이용하여 실행 관련 설정을 선언
     param_dir = LaunchConfiguration(   
