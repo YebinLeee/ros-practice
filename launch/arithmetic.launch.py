@@ -21,6 +21,21 @@ from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
+
+'''
+
+    def generate_launch_description():
+        
+        xxx = LaunchConfiguration(yyy)          # LaunchConfiguration 클래스로 실행 관련 설정 초기화
+        
+        return LaunchDescription([              # 리턴값으로 LaunchDescription 클래스 반환
+            DeclareLaunchArgument(aaa),
+            Node(bbb),
+            Node(ccc),
+        ])
+
+
+'''
 def generate_launch_description():
     # LaunchConfiguration 클래스 이용하여 실행 관련 설정을 선언
     param_dir = LaunchConfiguration(   
