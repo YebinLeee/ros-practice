@@ -33,7 +33,6 @@ void print_help()
 
 int main(int argc, char * argv[])
 {
-
   // '-h' 인자가 있는지 확인
   if (rcutils_cli_option_exist(argv, argv + argc, "-h")) {
     print_help();
@@ -54,10 +53,8 @@ int main(int argc, char * argv[])
   printf("goal_total_sum : %2.f\n", goal_total_sum);
 
   auto checker = std::make_shared<Checker>(goal_total_sum);
-
+  
   rclcpp::spin(checker);
-
   rclcpp::shutdown();
-
   return 0;
 }
