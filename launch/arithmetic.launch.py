@@ -37,6 +37,10 @@ from launch_ros.actions import Node
 '''
 
 def generate_launch_description():
+    
+    # namespace 설정
+    ros_namespace = LaunchConfiguration('ros_namespace')
+    
     # LaunchConfiguration 클래스 이용하여 실행 관련 설정을 선언
     param_dir = LaunchConfiguration(   
         'param_dir',
