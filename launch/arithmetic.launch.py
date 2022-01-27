@@ -41,21 +41,13 @@ def generate_launch_description():
     # namespace 설정
     ros_namespace = LaunchConfiguration('ros_namespace')
     
-    # LaunchConfiguration 클래스 이용하여 실행 관련 설정을 선언
-    param_dir = LaunchConfiguration(   
-        'param_dir',
-        default=os.path.join(
-            # topic_~ 패키지의 param 폴더에 위치한 yaml 파라미터 설정파일
-            get_package_share_directory('topic_service_action_rclcpp_example'),
-            'param',
-            'arithmetic_config.yaml'))
-
     # 메소드의 리턴값으로 LaunchDescription 반환
     return LaunchDescription([
         DeclareLaunchArgument( 
-            'param_dir',
-            default_value=param_dir,
-            description='Full path of parameter file'),
+            'ros_namespace',
+            default_value = os.environ['ROS_NAMESPACE'],
+            description='Namespace for the robot'),
+        
         # 실행할 노드 설정
         Node(
             package='topic_service_action_rclcpp_example',  # 실행할 패키지 이름
